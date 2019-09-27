@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../cell/cell.hpp"
+#include "../stack/stack.hpp"
 
 typedef struct maze{
     int sizeX;
@@ -15,9 +16,9 @@ typedef struct maze{
     int keysNumber;
 }maze;
 
-void initMaze(maze *_maze, char *fileName);
-void backtrackingAlghoritmMaze(maze *_maze);
-void mallocCellMaze(cell ***_cell, int sizeX, int sizeY);
-int moveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements);
+void mazeInitMaze(maze *_maze, char *fileName);
+void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute);
+void mazeMallocCellMaze(cell ***_cell, int sizeX, int sizeY);
+int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, stack ** exitRoute);
 
 #endif

@@ -1,6 +1,7 @@
 #include "maze.hpp"
+#include "../stack/stack.hpp"
 
-void initMaze(maze *_maze, char *fileName){
+void mazeInitMaze(maze *_maze, char *fileName){
     
     char path[100]="././inputFiles/";
     FILE *file=NULL;
@@ -70,17 +71,19 @@ void initMaze(maze *_maze, char *fileName){
                 }
             }  
 
-            mallocCellMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
+            mazeMallocCellMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
         }   
     }    
 
 }
 
-int moveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements){
+int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, stack ** exitRoute){
     if(backtrackingCoordinateY>=0 && backtrackingCoordinateY<_maze->sizeY && backtrackingCoordinateX>=0 && backtrackingCoordinateX<_maze->sizeX){
         if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell==output){
             (*sucessCoordinateY)=backtrackingCoordinateY;
             (*sucessCoordinateX)=backtrackingCoordinateX;
+            stackStack(exitRoute, backtrackingCoordinateY, backtrackingCoordinateX);
+
             return 1;
         }else if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell!=wall && !(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX].pathUsed)){
             if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell==door){
@@ -93,11 +96,11 @@ int moveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordi
             }
             _maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX].pathUsed=1;
             *movements+=1;
-            printf("%d, %d\n", backtrackingCoordinateY, backtrackingCoordinateX);
-            if(!moveStudent(_maze, backtrackingCoordinateY, backtrackingCoordinateX-1, sucessCoordinateY, sucessCoordinateX, movements)){
-                if(!moveStudent(_maze, backtrackingCoordinateY-1, backtrackingCoordinateX, sucessCoordinateY, sucessCoordinateX, movements)){
-                    if(!moveStudent(_maze, backtrackingCoordinateY, backtrackingCoordinateX+1, sucessCoordinateY, sucessCoordinateX, movements)){
-                        if(!moveStudent(_maze, backtrackingCoordinateY+1, backtrackingCoordinateX, sucessCoordinateY, sucessCoordinateX, movements)){
+            //printf("Avanco: %d, %d\n", backtrackingCoordinateY, backtrackingCoordinateX);
+            if(!mazeMoveStudent(_maze, backtrackingCoordinateY, backtrackingCoordinateX-1, sucessCoordinateY, sucessCoordinateX, movements, exitRoute)){
+                if(!mazeMoveStudent(_maze, backtrackingCoordinateY-1, backtrackingCoordinateX, sucessCoordinateY, sucessCoordinateX, movements, exitRoute)){
+                    if(!mazeMoveStudent(_maze, backtrackingCoordinateY, backtrackingCoordinateX+1, sucessCoordinateY, sucessCoordinateX, movements, exitRoute)){
+                        if(!mazeMoveStudent(_maze, backtrackingCoordinateY+1, backtrackingCoordinateX, sucessCoordinateY, sucessCoordinateX, movements, exitRoute)){
                             *movements+=1;
                             if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell==door){
                                 _maze->keysNumber+=1;
@@ -105,13 +108,14 @@ int moveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordi
                                 _maze->keysNumber-=1;
                             }
                             _maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX].pathUsed=0;
-                            printf("%d, %d\n", backtrackingCoordinateY, backtrackingCoordinateX);
+                            //printf("Retorno: %d, %d\n", backtrackingCoordinateY, backtrackingCoordinateX);
                             return 0;
                         }
                     }
                 }
             }
 
+            stackStack(exitRoute, backtrackingCoordinateY, backtrackingCoordinateX);
             return 1;
         }
 
@@ -121,18 +125,19 @@ int moveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordi
     return 0;
 }
 
-void backtrackingAlghoritmMaze(maze *_maze){
+void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute){
     int movements=0;
     int sucessCoordinateX=0;
     int sucessCoordinateY=0;
-    if(moveStudent(_maze, _maze->studentCoordinateY, _maze->studentCoordinateX, &sucessCoordinateY, &sucessCoordinateX, &movements)){
+    stackInitStack(exitRoute);
+    if(mazeMoveStudent(_maze, _maze->studentCoordinateY, _maze->studentCoordinateX, &sucessCoordinateY, &sucessCoordinateX, &movements, exitRoute)){
         printf("Movimentos: %d\nCoordenada de chegada: %d, %d\n", movements, sucessCoordinateY, sucessCoordinateX);
     }else{
         printf("Labirinto sem saida");
     }
 }
 
-void mallocCellMaze(cell ***_cell, int sizeX, int sizeY){
+void mazeMallocCellMaze(cell ***_cell, int sizeX, int sizeY){
     //(*_cell)=(cell**)malloc(sizeY*sizeof(cell*));
     for (int i=0; i < sizeY; i++){
         //(*_cell)[i]=(cell*)malloc(sizeX*sizeof(cell)); 
