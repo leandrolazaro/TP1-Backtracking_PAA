@@ -19,6 +19,12 @@ typedef struct maze{
 void mazeInitMaze(maze *_maze, char *fileName);
 void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute);
 void mazeMallocCellMaze(cell ***_cell, int sizeX, int sizeY);
-int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, stack ** exitRoute);
+#ifdef DEBUG
+    int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, int *recursiveCalls, stack ** exitRoute);
+#endif
+#ifndef DEBUG
+    int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, stack ** exitRoute);
+#endif
+
 
 #endif

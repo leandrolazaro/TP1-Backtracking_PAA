@@ -12,7 +12,7 @@ CCFLAGS=$(WARN)
 SRC= structs/cell/cell.cpp structs/maze/maze.cpp structs/stack/stack.cpp main.cpp
 
 all:
-	$(CC) -o $(TARGET) $(SRC) $(CCFLAGS) -lm
+	$(CC) -o $(TARGET) $(SRC) $(CCFLAGS) -lm -DDEBUG=1
 
 run:
 	./$(TARGET)

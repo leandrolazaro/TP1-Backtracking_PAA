@@ -6,11 +6,16 @@
 
 int main(){
 
+    #ifdef DEBUG
+        printf("x-x-x-x-x-x-x DEBUG MODE x-x-x-x-x-x-x\n");
+    #endif
+
     maze * maze_=(maze*)malloc(sizeof(maze));
-    stack * exitRoute;
+    stack * exitRoute=NULL;
     int x, y;
     char fileName[20]="maze.txt";
     mazeInitMaze(maze_, fileName);
+
     mazeBacktrackingAlghoritmMaze(maze_, &exitRoute);
 
     while (exitRoute!=NULL)
@@ -19,7 +24,6 @@ int main(){
         printf("%d %d\n", x, y);
     }
     
-
 
 
 }   
