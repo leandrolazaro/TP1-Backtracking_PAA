@@ -25,13 +25,20 @@ int main(){
                 printf("2 - Carregar arquivo do labrinto\n");
                 printf("3 - Mostra solução\n");
                 printf("4 - Sair\n");
-                scanf("%d", &option);
+                if(!scanf("%d", &option)){
+                    printf("Error\n");
+                    return 0;
+                }
                 break;
             case 2:
                 mazeDeleteMaze(_maze);
                 _maze=(maze*)malloc(sizeof(maze));
                 printf("Digite o nome do arquivo txt:\n");
-                scanf("%s", fileName);
+                if(!scanf("%s", fileName)){
+                    printf("Error\n");
+                    return 0;
+                }
+                
                 printf("Montando labirinto...\n");
                 mazeInitMaze(_maze, fileName);
                 printf("Labirinto montado com sucesso!\n");
@@ -56,7 +63,10 @@ int main(){
             
             default:
                 printf("Digite outra opção ou digite 1 para mostrar o menu novamente\n");
-                scanf("%d", &option);
+                if(!scanf("%d", &option)){
+                    printf("Error\n");
+                    return 1;
+                }
                 break;
         }
     }
