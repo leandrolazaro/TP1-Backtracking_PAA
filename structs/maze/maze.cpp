@@ -19,7 +19,6 @@ void mazeInitMaze(maze *_maze, char *fileName){
         if((read = getline(&line, &len, file)) != -1) {
             //printf("Retrieved line of length %zu:\n", read);
             //printf("%s", line);
-
             _maze->sizeY= atoi(strtok(line," "));
             _maze->sizeX= atoi(strtok(NULL, " "));
             _maze->keysNumber=atoi(strtok(NULL, " "));
@@ -71,7 +70,7 @@ void mazeInitMaze(maze *_maze, char *fileName){
                 }
             }  
 
-            mazeMallocCellMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
+            mazeShowMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
         }   
     }    
 
@@ -169,6 +168,13 @@ void mazeInitMaze(maze *_maze, char *fileName){
                     }
                 }
 
+                if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell==door){
+                    _maze->keysNumber+=1;
+                }else if(_maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX]._typeCell==key){
+                    _maze->keysNumber-=1;
+                }
+                _maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX].pathUsed=0;
+
                 stackStack(exitRoute, backtrackingCoordinateY, backtrackingCoordinateX);
                 return 1;
             }
@@ -207,7 +213,7 @@ void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute){
     #endif
 }
 
-void mazeMallocCellMaze(cell ***_cell, int sizeX, int sizeY){
+void mazeShowMaze(cell ***_cell, int sizeX, int sizeY){
     //(*_cell)=(cell**)malloc(sizeY*sizeof(cell*));
     for (int i=0; i < sizeY; i++){
         //(*_cell)[i]=(cell*)malloc(sizeX*sizeof(cell)); 
@@ -217,4 +223,14 @@ void mazeMallocCellMaze(cell ***_cell, int sizeX, int sizeY){
         }
         printf("\n");
     } 
+}
+
+void mazeDeleteMaze(maze *_maze){
+    if(_maze!=NULL){
+        for (int i=0; i < _maze->sizeY; i++){
+            delete(_maze->_cell[i]); 
+        } 
+        delete(_maze->_cell);
+        delete(_maze);
+    }
 }
