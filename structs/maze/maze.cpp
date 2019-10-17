@@ -234,3 +234,160 @@ void mazeDeleteMaze(maze *_maze){
         delete(_maze);
     }
 }
+
+void mazeInitRandomMaze(maze *_maze, int dificult){
+    int sizeY;
+    int sizeX;
+    int wallQuantity;
+    int limiteDoorPerWallQuantity;
+    int amountkeysOnFloor;
+    int keysQuantity;
+    int probabilidadeDePorta=5;
+    srand(time(0));
+
+    //Facil
+    if(dificult==0){
+        sizeY=(rand() % (10 - 5 + 1)) + 5;
+        sizeX=(rand() % (10 - 5 + 1)) + 5;
+        wallQuantity=(rand() % (5 - 0 + 1)) + 0;
+        keysQuantity=(rand() % (5 - 0 + 1)) + 0;
+        limiteDoorPerWallQuantity=(rand() % (5 - 0 + 1)) + 0;
+        amountkeysOnFloor=(rand() % (10 - 0 + 1)) + 0;
+    //Medio
+    }else if(dificult==1){
+        sizeY=(rand() % (20 - 10 + 1)) + 10;
+        sizeX=(rand() % (20 - 10 + 1)) + 10;
+        wallQuantity=(rand() % (20 - 10 + 1)) + 10;
+        keysQuantity=(rand() % (20 - 0 + 1)) + 0;
+        limiteDoorPerWallQuantity=(rand() % (2 - 0 + 1)) + 0;
+        amountkeysOnFloor=(rand() % (5 - 0 + 1)) + 0;
+    //Difícil
+    }else{
+        sizeY=(rand() % (30 - 20 + 1)) + 20;
+        sizeX=(rand() % (300 -20 + 1)) + 20;
+        wallQuantity=(rand() % (15 - 10 + 1)) + 10;
+        keysQuantity=(rand() % (15 - 0 + 1)) + 0;
+        limiteDoorPerWallQuantity=(rand() % (2 - 0 + 1)) + 0;
+        amountkeysOnFloor=(rand() % (2 - 0 + 1)) + 0;
+    }
+
+    _maze->sizeY=sizeY;
+    _maze->sizeX=sizeX;
+    _maze->keysNumber=keysQuantity;
+    (_maze->_cell)=(cell**)malloc((_maze->sizeY)*sizeof(cell*));
+
+    //Alocação do labirinto na memória
+    for (int i=0; i < _maze->sizeY; i++){
+
+        (_maze->_cell)[i]=(cell*)malloc((_maze->sizeX)*sizeof(cell)); 
+
+        for (int j = 0; j < _maze->sizeX; j++){
+            if(i==0){ 
+                _maze->_cell[i][j]._typeCell=output;
+            }else{
+                _maze->_cell[i][j]._typeCell=empty;
+            }
+            _maze->_cell[i][j].pathUsed=0;
+        }
+    }
+
+    int positionY;
+    int positionX;
+    int wallOrientation;
+    int wallSize;
+    int doorQuantity;
+
+    //Define aleatoriamente a posição do estudade
+    do{
+        positionX=(rand() % ((sizeX-1) - 0 + 1)) + 0;
+    }while(_maze->_cell[sizeY-1][positionX]._typeCell!=empty);
+
+    _maze->studentCoordinateY=sizeY-1;
+    _maze->studentCoordinateX=positionX;
+    _maze->_cell[sizeY-1][positionX]._typeCell=student;
+
+    //Coloca paredes em locais aleatórios
+    for(int i=0; i<wallQuantity; i++){
+        printf("teste\n");
+        doorQuantity=0;
+        //Encontra uma posição central para a parede
+        do{
+            positionY=(rand() % ((sizeY-1) - 0 + 1)) + 0;
+            positionX=(rand() % ((sizeX-1) - 0 + 1)) + 0;  
+        }while(_maze->_cell[positionY][positionX]._typeCell!=empty || positionY==0);
+        wallOrientation=(rand() % (1 - 0 + 1)) + 0;
+
+        //Parede na horizontal
+        if(wallOrientation){
+            wallSize=(rand() % ((sizeY/2) - 0 + 1)) + 0;
+            for(int y=0; y<wallSize && positionY-y>=0; y++){
+                if(_maze->_cell[positionY-y][positionX]._typeCell==empty){
+                    if(doorQuantity<limiteDoorPerWallQuantity){
+                        if(((rand() % (probabilidadeDePorta - 0 + 1)) + 0)==0){
+                            _maze->_cell[positionY-y][positionX]._typeCell=door;
+                        }else{
+                            _maze->_cell[positionY-y][positionX]._typeCell=wall;
+                        }
+                    }else{
+                        _maze->_cell[positionY-y][positionX]._typeCell=wall;
+                    }
+                }
+            }
+            for(int y=0; y<wallSize && positionY+y<sizeY; y++){
+                if(_maze->_cell[positionY+y][positionX]._typeCell==empty){
+                    if(doorQuantity<limiteDoorPerWallQuantity){
+                        if(((rand() % (probabilidadeDePorta - 0 + 1)) + 0)==0){
+                            _maze->_cell[positionY+y][positionX]._typeCell=door;
+                        }else{
+                            _maze->_cell[positionY+y][positionX]._typeCell=wall;
+                        }
+                    }else{
+                        _maze->_cell[positionY+y][positionX]._typeCell=wall;
+                    }
+                }
+            }
+        //Parede na vertical
+        }else{
+            wallSize=(rand() % ((sizeX/2) - 0 + 1)) + 0;
+            for(int x=0; x<wallSize && positionX-x>=1; x++){
+                if(_maze->_cell[positionY][positionX-x]._typeCell==empty){
+                    if(doorQuantity<limiteDoorPerWallQuantity){
+                        if(((rand() % (probabilidadeDePorta - 0 + 1)) + 0)==0){
+                            _maze->_cell[positionY][positionX-x]._typeCell=door;
+                        }else{
+                            _maze->_cell[positionY][positionX-x]._typeCell=wall;
+                        }
+                    }else{
+                        _maze->_cell[positionY][positionX-x]._typeCell=wall;
+                    }
+                }
+            }
+            for(int x=0; x<wallSize && positionX+x<sizeX; x++){
+                if(_maze->_cell[positionY][positionX+x]._typeCell==empty){
+                    if(doorQuantity<limiteDoorPerWallQuantity){
+                        if(((rand() % (probabilidadeDePorta - 0 + 1)) + 0)==0){
+                            _maze->_cell[positionY][positionX+x]._typeCell=door;
+                        }else{
+                            _maze->_cell[positionY][positionX+x]._typeCell=wall;
+                        }
+                    }else{
+                        _maze->_cell[positionY][positionX+x]._typeCell=wall;
+                    }
+                }
+            }
+        }
+    }
+
+    //Coloca chaves em locais aleatórios
+    for(int i=0; i<amountkeysOnFloor; i++){
+        do{
+            positionY=(rand() % ((sizeY-1) - 0 + 1)) + 0;
+            positionX=(rand() % ((sizeX-1) - 0 + 1)) + 0;
+        }while(_maze->_cell[positionY][positionX]._typeCell!=empty || positionY==0);
+
+        _maze->_cell[positionY][positionX]._typeCell=key;
+    }
+
+    mazeShowMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
+
+}

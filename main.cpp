@@ -12,6 +12,7 @@ int main(){
 
     maze * _maze=NULL;
     stack * exitRoute=NULL;
+    int dificult;
     int x, y;
     char fileName[100]="maze.txt";
     //mazeInitMaze(_maze, fileName);
@@ -23,8 +24,9 @@ int main(){
                 printf("Labirinto do ET Bilu\n");
                 printf("1 - Mostrar este Menu\n");
                 printf("2 - Carregar arquivo do labrinto\n");
-                printf("3 - Mostra solução\n");
-                printf("4 - Sair\n");
+                printf("3 - Gerar labirinto aleatório\n");
+                printf("4 - Mostra solução\n");
+                printf("5 - Sair\n");
                 if(!scanf("%d", &option)){
                     printf("Error\n");
                     return 0;
@@ -47,6 +49,24 @@ int main(){
 
                 break;
             case 3:
+                mazeDeleteMaze(_maze);
+                _maze=(maze*)malloc(sizeof(maze));
+                printf("Escolha uma dificuldade:\n");
+                printf("0-Fácil:\n");
+                printf("1-Médio\n");
+                printf("2-Difícil\n");
+                if(!scanf("%d", &dificult)){
+                    printf("Error\n");
+                    return 0;
+                }
+                printf("Montando labirinto....\n");
+                mazeInitRandomMaze(_maze, dificult);
+                printf("Labirinto montado com sucesso!\n");
+
+                option=-1;
+
+                break;
+            case 4:
                 mazeBacktrackingAlghoritmMaze(_maze, &exitRoute);            
                 printf("Cooredanas de movimentação até a sáida:\n");
                 while (exitRoute!=NULL){
@@ -56,7 +76,7 @@ int main(){
                 option=-1;
                 
                 break;
-            case 4:
+            case 5:
                 printf("Obrigado por usar o Labririnto do ET Bilu. Busquem conhecimento!\n");
                 option=0;
                 break;

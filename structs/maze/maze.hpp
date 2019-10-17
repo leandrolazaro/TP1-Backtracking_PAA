@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h> 
 #include <string.h>
 #include "../cell/cell.hpp"
 #include "../stack/stack.hpp"
@@ -26,6 +27,7 @@ void mazeDeleteMaze(maze *_maze);
 #ifndef DEBUG
     int mazeMoveStudent(maze *_maze, int backtrackingCoordinateY, int backtrackingCoordinateX, int *sucessCoordinateY, int *sucessCoordinateX, int *movements, stack ** exitRoute);
 #endif
+void mazeInitRandomMaze(maze *_maze, int dificult);
 
 
 #endif
