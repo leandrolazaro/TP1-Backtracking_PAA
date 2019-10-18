@@ -200,7 +200,7 @@ void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute){
         }else{
             printf("Movimentos: %d\n", movements);
             printf("Chamadas recursivas: %d\n", recursiveCalls);
-            printf("Labirinto sem saida");
+            printf("Labirinto sem saida\n");
         }
     #endif
     #ifndef DEBUG
@@ -208,7 +208,7 @@ void mazeBacktrackingAlghoritmMaze(maze *_maze, stack ** exitRoute){
             printf("Movimentos: %d\nCoordenada de chegada: %d, %d\n", movements, sucessCoordinateY, sucessCoordinateX);
         }else{
             printf("Movimentos: %d\n", movements);
-            printf("Labirinto sem saida");
+            printf("Labirinto sem saida\n");
         }
     #endif
 }
@@ -308,7 +308,6 @@ void mazeInitRandomMaze(maze *_maze, int dificult){
 
     //Coloca paredes em locais aleatórios
     for(int i=0; i<wallQuantity; i++){
-        printf("teste\n");
         doorQuantity=0;
         //Encontra uma posição central para a parede
         do{
