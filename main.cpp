@@ -25,8 +25,8 @@ int main(){
                 printf("1 - Mostrar este Menu\n");
                 printf("2 - Carregar arquivo do labrinto\n");
                 printf("3 - Gerar labirinto aleatório\n");
-                printf("4 - Mostra solução\n");
-                printf("5 - Melhor caminho até a saída\n");
+                printf("4 - Mostrar solução utilizando backing track\n");
+                printf("5 - Mostrar melhor caminho utilizando pesquisa em largura\n");
                 printf("6 - Sair\n");
                 if(!scanf("%d", &option)){
                     printf("Error\n");
