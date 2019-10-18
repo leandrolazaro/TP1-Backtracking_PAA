@@ -9,7 +9,7 @@ WARN=-Wall
 
 CCFLAGS=$(WARN)
 
-SRC= structs/cell/cell.cpp structs/maze/maze.cpp structs/stack/stack.cpp main.cpp
+SRC= structs/cell/cell.cpp structs/maze/maze.cpp structs/stack/stack.cpp structs/row/row.cpp main.cpp
 
 all:
 	$(CC) -o $(TARGET) $(SRC) $(CCFLAGS) -lm -O3

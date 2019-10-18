@@ -26,7 +26,8 @@ int main(){
                 printf("2 - Carregar arquivo do labrinto\n");
                 printf("3 - Gerar labirinto aleatório\n");
                 printf("4 - Mostra solução\n");
-                printf("5 - Sair\n");
+                printf("5 - Melhor caminho até a saída\n");
+                printf("6 - Sair\n");
                 if(!scanf("%d", &option)){
                     printf("Error\n");
                     return 0;
@@ -77,6 +78,12 @@ int main(){
                 
                 break;
             case 5:
+                printf("Cooredanas de movimentação até a sáida:\n");
+                mazeWidthSearch(_maze);            
+                option=-1;
+                
+                break;
+            case 6:
                 printf("Obrigado por usar o Labririnto do ET Bilu. Busquem conhecimento!\n");
                 option=0;
                 break;

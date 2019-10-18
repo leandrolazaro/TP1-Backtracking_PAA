@@ -175,7 +175,7 @@ void mazeInitMaze(maze *_maze, char *fileName){
                 }
                 _maze->_cell[backtrackingCoordinateY][backtrackingCoordinateX].pathUsed=0;
 
-                stackStack(exitRoute, backtrackingCoordinateY, backtrackingCoordinateX);
+                stackStack(exitRoute, backtrackingCoordinateX, backtrackingCoordinateY);
                 return 1;
             }
 
@@ -389,4 +389,97 @@ void mazeInitRandomMaze(maze *_maze, int dificult){
 
     mazeShowMaze(&(_maze->_cell), _maze->sizeX, _maze->sizeY);
 
+}
+
+void mazeWidthSearch(maze* _maze){
+    row *_row=NULL;
+    rowInitRow(&(_row), _maze->studentCoordinateY, _maze->studentCoordinateX, _maze->keysNumber);
+    _row=mazeWidthSearchAlghoritm(_maze, _row);
+    if(_row==NULL){
+        printf("Labirinto sem saída\n");
+    }
+    rowShowAllPreviousNode(_row);
+    //rowDeleteRow(_row);
+}
+row* mazeWidthSearchAlghoritm(maze* _maze, row* _row){
+    row *tempRow;
+    cell *tempCell;
+    int count=0;
+    while(_row!=NULL && count<9999999999){
+        if(_row->X-1>=0){
+            tempRow=rowSearchNode(_row, _row->Y, _row->X-1);
+            if(tempRow==NULL){
+                tempCell=&(_maze->_cell[_row->Y][_row->X-1]);
+                if(tempCell->_typeCell==empty){
+                    rowInsertNode(_row, _row->Y, _row->X-1, _row->keysQuantity);
+                }else if(tempCell->_typeCell==door){
+                    if(_row->keysQuantity>0){
+                        rowInsertNode(_row, _row->Y, _row->X-1, _row->keysQuantity-1);
+                    }
+                }else if(tempCell->_typeCell==key){
+                    rowInsertNode(_row, _row->Y, _row->X-1, _row->keysQuantity+1);
+                }else if(tempCell->_typeCell==output){
+                    rowInsertNode(_row, _row->Y, _row->X-1, _row->keysQuantity);
+                    return rowSearchLastNode(_row);
+                }
+            }
+        }
+        if(_row->Y-1>=0){
+            tempRow=rowSearchNode(_row, _row->Y-1, _row->X);
+            if(tempRow==NULL){
+                tempCell=&(_maze->_cell[_row->Y-1][_row->X]);
+                if(tempCell->_typeCell==empty){
+                    rowInsertNode(_row, _row->Y-1, _row->X, _row->keysQuantity);
+                }else if(tempCell->_typeCell==door){
+                    if(_row->keysQuantity>0){
+                        rowInsertNode(_row, _row->Y-1, _row->X, _row->keysQuantity-1);
+                    }
+                }else if(tempCell->_typeCell==key){
+                    rowInsertNode(_row, _row->Y-1, _row->X, _row->keysQuantity+1);
+                }else if(tempCell->_typeCell==output){
+                    rowInsertNode(_row, _row->Y-1, _row->X, _row->keysQuantity);
+                    return rowSearchLastNode(_row);
+                }
+            }
+        }
+        if(_row->X+1<_maze->sizeX){
+            tempRow=rowSearchNode(_row, _row->Y, _row->X+1);
+            if(tempRow==NULL){
+                tempCell=&(_maze->_cell[_row->Y][_row->X+1]);
+                if(tempCell->_typeCell==empty){
+                    rowInsertNode(_row, _row->Y, _row->X+1, _row->keysQuantity);
+                }else if(tempCell->_typeCell==door){
+                    if(_row->keysQuantity>0){
+                        rowInsertNode(_row, _row->Y, _row->X+1, _row->keysQuantity-1);
+                    }
+                }else if(tempCell->_typeCell==key){
+                    rowInsertNode(_row, _row->Y, _row->X+1, _row->keysQuantity+1);
+                }else if(tempCell->_typeCell==output){
+                    rowInsertNode(_row, _row->Y, _row->X+1, _row->keysQuantity);
+                    return rowSearchLastNode(_row);
+                }
+            }
+        }
+        if(_row->Y+1<_maze->sizeY){
+            tempRow=rowSearchNode(_row, _row->Y+1, _row->X);
+            if(tempRow==NULL){
+                tempCell=&(_maze->_cell[_row->Y+1][_row->X]);
+                if(tempCell->_typeCell==empty){
+                    rowInsertNode(_row, _row->Y+1, _row->X, _row->keysQuantity);
+                }else if(tempCell->_typeCell==door){
+                    if(_row->keysQuantity>0){
+                        rowInsertNode(_row, _row->Y+1, _row->X, _row->keysQuantity-1);
+                    }
+                }else if(tempCell->_typeCell==key){
+                    rowInsertNode(_row, _row->Y+1, _row->X, _row->keysQuantity+1);
+                }else if(tempCell->_typeCell==output){
+                    rowInsertNode(_row, _row->Y+1, _row->X, _row->keysQuantity);
+                    return rowSearchLastNode(_row);
+                }
+            }
+        }
+        _row=_row->next;
+        count++;
+    }
+    return NULL;
 }
