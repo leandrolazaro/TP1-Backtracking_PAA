@@ -38,7 +38,7 @@ void rowDeleteRow(row *_row){
 void rowDeleteRowPrevious(row *_row){
     if(_row!=NULL){
         rowDeleteRowPrevious(_row->previous);
-        delete(_row);
+        free(_row);
     }
     return;
 }

@@ -228,10 +228,10 @@ void mazeShowMaze(cell ***_cell, int sizeX, int sizeY){
 void mazeDeleteMaze(maze *_maze){
     if(_maze!=NULL){
         for (int i=0; i < _maze->sizeY; i++){
-            delete(_maze->_cell[i]); 
+            free(_maze->_cell[i]); 
         } 
-        delete(_maze->_cell);
-        delete(_maze);
+        free(_maze->_cell);
+        free(_maze);
     }
 }
 
